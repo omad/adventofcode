@@ -1,4 +1,4 @@
-
+use std::str::FromStr;
 
 fn main() {
 
@@ -31,7 +31,7 @@ fn main() {
 }
 
 fn is_valid_pt2(pos1: usize, pos2: usize, thechar: char, thestr: &str) -> bool {
-    (thestr.chars().nth(pos1 + 1) == Some(thechar)) ^ (thestr.chars().nth(pos2 + 1) == Some(thechar))
+    (thestr.chars().nth(pos1 - 1) == Some(thechar)) ^ (thestr.chars().nth(pos2 - 1) == Some(thechar))
 }
 
 fn count_chars(lookfor: char, mystr: &str) -> usize {
@@ -42,4 +42,38 @@ fn count_chars(lookfor: char, mystr: &str) -> usize {
         }
     }
     count
+}
+
+#[derive(Debug)]
+struct PasswordLine {
+    num1: usize,
+    num2: usize,
+    thechar: char,
+    password: String
+}
+impl FromStr for PasswordLine {
+    type Err = LineParseError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let v = s.split_whitespace().take(3).collect::<Vec<&str>>();
+        let pair = v[0];
+        let thechar = v[1];
+        let passwd = v[2];
+        let bounds: Vec<usize> = pair.split('-').take(2).map(|num| num.parse().unwrap()).collect();
+        let thechar = thechar.chars().nth(0).unwrap();
+
+        Ok(PasswordLine {num1: bounds[0], num2: bounds[1], thechar, password: passwd.to_string()})
+
+    }
+}
+
+#[derive(Debug)]
+enum LineParseError {
+    InvalidLine { details: String },
+}
+impl std::string::ToString for LineParseError {
+    fn to_string(&self) -> String {
+        match self {
+            LineParseError::InvalidLine { details } => details.to_string(),
+        }
+    }
 }
