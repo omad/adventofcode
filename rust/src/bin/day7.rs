@@ -1,10 +1,4 @@
 use std::collections::HashMap;
-use std::collections::HashSet;
-// struct BagType {
-//     name: String,
-//     must_contain: Vec<(usize, String)>
-
-// }
 
 fn main() {
 
