@@ -9,6 +9,9 @@ fn main() {
         .map(|line| line.parse().unwrap())
         .collect();
 
+    let mut chosen = 0;
+
+    // Part #1
     for (i, num) in nums.iter().enumerate() {
         print!("{}: {}", i, num);
         if i <= 25 {
@@ -23,9 +26,20 @@ fn main() {
             println!(" valid.");
         } else {
             println!(" invalid.");
+            chosen = *num;
             break;
         }
+    }
 
-
+    for size in 2..nums.len() {
+        for window in nums.windows(size) {
+            let sum: u64 = window.iter().sum();
+            if sum == chosen {
+                let min: &u64 = window.iter().min().unwrap();
+                let max: &u64 = window.iter().max().unwrap();
+                println!("Part 2: {}", min + max);
+                return;
+            }
+        }
     }
 }
